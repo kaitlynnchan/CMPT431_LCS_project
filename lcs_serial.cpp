@@ -1,6 +1,8 @@
 #include "core/read_file.h"
 #include <iostream>
 #include <vector>
+#include <ctime>
+
 using namespace std;
 
 // Returns length of LCS for s1[0..m-1], s2[0..n-1]
@@ -26,6 +28,25 @@ int lcs(string &s1, string &s2) {
     return dp[m][n];
 }
 
+void lcs_serial(string &s1, string &s2){
+    // start timer
+    std::clock_t start;
+    double duration;
+    start = std::clock();
+    
+    cout << "Calculating... " << endl;
+    int lcs_length = lcs(s1, s2);
+
+    // calculate the time taken
+    duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+
+    std::cout << "process, time_taken" << endl;
+    std::cout << "0, " << duration << endl;
+
+    std::cout << "Longest Common Subsequence : " << lcs_length << endl;
+    std::cout << "Time Taken (in seconds) : " << duration << endl;
+}
+
 int main(int argc, char *argv[]) {
     
     string string1 = readFile(argv[1]);
@@ -33,7 +54,6 @@ int main(int argc, char *argv[]) {
     std::cout << "String 1 : " << string1 << "\n";
     std::cout << "String 2 : " << string2 << "\n";
 
-    cout << lcs(string1, string2) << endl;
-
+    lcs_serial(string1, string2);
     return 0; 
 }
