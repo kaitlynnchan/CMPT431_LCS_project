@@ -21,8 +21,8 @@ def generate_small_inputs():
         size1 = random.randint(3, 50)
         size2 = random.randint(3, 30)
 
-        string1 = "".join(random.choices(string.ascii_letters + string.digits, k=size1))
-        string2 = "".join(random.choices(string.ascii_letters + string.digits, k=size2))
+        string1 = "".join(random.choices(string.ascii_letters, k=size1))
+        string2 = "".join(random.choices(string.ascii_letters, k=size2))
 
         f.write(string1)
         f.write("\n")
@@ -41,8 +41,8 @@ def generate_medium_inputs():
         size1 = random.randint(100, 1000)
         size2 = random.randint(100, 1000)
 
-        string1 = "".join(random.choices(string.ascii_uppercase + string.digits, k=size1))
-        string2 = "".join(random.choices(string.ascii_uppercase + string.digits, k=size2))
+        string1 = "".join(random.choices(string.ascii_letters, k=size1))
+        string2 = "".join(random.choices(string.ascii_letters, k=size2))
 
         f.write(string1)
         f.write("\n")
@@ -61,8 +61,8 @@ def generate_large_inputs():
         size1 = random.randint(5000, 10000)
         size2 = random.randint(5000, 10000)
 
-        string1 = "".join(random.choices(string.ascii_letters + string.digits, k=size1))
-        string2 = "".join(random.choices(string.ascii_letters + string.digits, k=size2))
+        string1 = "".join(random.choices(string.ascii_letters, k=size1))
+        string2 = "".join(random.choices(string.ascii_letters, k=size2))
 
         f.write(string1)
         f.write("\n")
@@ -92,6 +92,15 @@ if len(sys.argv) > 1:
         generate_large_inputs()
         print("generate large inputs")
 else:
+    if not os.path.exists(input_dir + "/small_inputs"):
+        os.mkdir(input_dir + "/small_inputs")
+    if not os.path.exists(input_dir + "/medium_inputs"): 
+        os.mkdir(input_dir + "/medium_inputs")
+    elif not os.path.exists(input_dir + "/large_inputs"): 
+        os.mkdir(input_dir + "/large_inputs")
+    generate_small_inputs()
+    generate_medium_inputs()
+    generate_large_inputs()
     ## generates all 3 inputs 
     print("generate all inputs")
 
