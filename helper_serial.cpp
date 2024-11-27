@@ -1,8 +1,27 @@
 #include "core/read_file.h"
 #include <iostream>
 #include <vector>
+#include <tuple> 
+
+/*** MUST BE DELETED BEFORE SUBMISSION ***/
 
 using namespace std;
+
+void longestCommonSubsequence(string &s1, string &s2, vector<tuple<int, int>> &diagonalIndices, int startIndex, int endIndex, vector<vector<int>> &dp) {
+    for (int x = startIndex; x < endIndex; x++) {
+        // Unpack the tuple containing (i, j) indices
+        int i = get<0>(diagonalIndices[x]);
+        int j = get<1>(diagonalIndices[x]);
+
+        // Update the dp table based on character comparison
+        if (s1[i - 1] == s2[j - 1]) {
+            dp[i][j] = dp[i - 1][j - 1] + 1;
+        } 
+        else {
+            dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+        }
+    }
+}
 
 // Returns length of LCS for s1[0..m-1], s2[0..n-1]
 int lcs_serial(string &s1, string &s2) 
@@ -14,6 +33,9 @@ int lcs_serial(string &s1, string &s2)
     // Initializing a matrix of size (m+1)*(n+1)
     vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
 
+    // Declare a list to hold pairs (i, j)
+    vector<tuple<int, int>> diagonalIndices;
+
     int number_of_diagnals = m +n -1;
     for (int d = 1; d <= number_of_diagnals; d++)
     {
@@ -22,19 +44,18 @@ int lcs_serial(string &s1, string &s2)
             for (int j = 1; j <= n; j++)
             {
                 // Ensure we are only processing elements along the diagonal
-                if( j + i == d + 1)
-                {
-                    // Update the dp table based on character comparison
-                    if (s1[i - 1] == s2[j - 1]) {
-                        dp[i][j] = dp[i - 1][j - 1] + 1;
-                    } 
-                    else {
-                        dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
-                    }
+                if( j + i == d + 1){ 
+                    diagonalIndices.push_back(make_tuple(i, j));
                 }
             }
         }
     }
+
+    // Define start and end positions for processing
+    int start = 0;
+    int end = diagonalIndices.size();
+
+    longestCommonSubsequence(s1, s2, diagonalIndices, start, end, dp);
 
     // dp[m][n] contains length of LCS for s1[0..m-1]
     // and s2[0..n-1]
