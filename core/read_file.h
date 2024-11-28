@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -31,4 +32,18 @@ void readFile(string inputFile, string &s1, string &s2){
 
     // Close the file
     f.close();
+}
+
+void parseInputs(string input, void *output){
+    char delimeter = '=';
+    stringstream ss(input);
+    string type, value;
+    getline(ss, type, delimeter);
+    getline(ss, value, delimeter);
+
+    if (!type.compare("--numThreads")){
+        *(int*)output = stoi(value);
+    } else if (!type.compare("--inputFile")){
+        *(string*)output = value;
+    }
 }
