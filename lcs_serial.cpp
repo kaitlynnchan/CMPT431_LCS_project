@@ -26,9 +26,9 @@ void longestCommonSubsequence(string &s1, string &s2, vector<tuple<int, int>> &d
 int lcs_serial(string &s1, string &s2) 
 {
     // start timer
-    std::clock_t start;
+    std::clock_t start_timer;
     double duration;
-    start = std::clock();
+    start_timer = std::clock();
     cout << "Calculating... " << endl;
     
     // m and n represent the lengths of s1 and s2
@@ -57,18 +57,16 @@ int lcs_serial(string &s1, string &s2)
     }
 
     // Define start and end positions for processing
-    int start = 0;
-    int end = diagonalIndices.size();
+    int startx = 0;
+    int endx = diagonalIndices.size();
 
-    longestCommonSubsequence(s1, s2, diagonalIndices, start, end, dp);
+    longestCommonSubsequence(s1, s2, diagonalIndices, startx, endx, dp);
 
      // calculate the time taken
-    duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+    duration = (std::clock() - start_timer) / (double) CLOCKS_PER_SEC;
 
     std::cout << "process, time_taken" << endl;
     std::cout << "0, " << duration << endl;
-
-    std::cout << "Longest Common Subsequence : " << lcs_length << endl;
     std::cout << "Time Taken (in seconds) : " << duration << endl;
     
     // dp[m][n] contains length of LCS for s1[0..m-1]
