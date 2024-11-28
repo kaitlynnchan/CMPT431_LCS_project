@@ -1,13 +1,13 @@
 #include "core/read_file.h"
-#include <iostream>
-#include <vector>
-#include <ctime>
-#include <thread>
 #include <barrier>
+#include <ctime>
+#include <iostream>
+#include <thread>
+#include <vector>
 
 using namespace std;
 
-void lcs(vector<vector<int>> &dp, string &s1, string &s2, int startx, int endx){
+void lcs(std::barrier<> &b, vector<vector<int>> &dp, string &s1, string &s2, int startx, int endx){
     int j = endx;
     for (int i = startx; i <= endx; i++) {
         if (s1[i - 1] == s2[j - 1])
@@ -17,7 +17,8 @@ void lcs(vector<vector<int>> &dp, string &s1, string &s2, int startx, int endx){
         cout << "dp[" << i << "][" << j << "] = " << dp[i][j] << endl;
         j--;
     }
-    return NULL;
+
+    b.arrive_and_wait();
 }
 
 /* ONLY WORKS FOR HEIGHT AND WIDTH THAT ARE THE SAME SIZE */
@@ -55,33 +56,38 @@ void lcs_parallel(int n_threads, string &s1, string &s2) {
         }
         std::cout << "\n";
         /* Purpose: TEST and PRINT */
+
         
-        std::thread row_threads[n_threads];
         double split = rowArray.size() / n_threads;
         if(split < 1){
-            // row_threads[0] = std::thread(lcs, dp, s1, s2, rowArray.front(), rowArray.back());
+            std::barrier b(1);
+            // std::thread row_threads[1];
+            lcs(b, dp, s1, s2, rowArray.front(), rowArray.back());
+            // row_threads[0] = std::thread(lcs, std::ref(b), std::ref(dp), std::ref(s1), std::ref(s2), rowArray.front(), rowArray.back());
         } else {
+            std::barrier b(n_threads);
+            std::thread row_threads[n_threads];
             for(int i = 0; i < n_threads; i++){
                 int startx = i * split;
                 
                 if(i == n_threads - 1){
                     split += rowArray.size() % n_threads;
                 }
-                int endx = startx + split;
+                int endx = startx + split - 1;
                 
                 // compute vertex decomposition
-                row_threads[i] = std::thread(lcs, dp, s1, s2, rowArray[startx], rowArray[endx]);
+                row_threads[i] = std::thread(lcs, std::ref(b), std::ref(dp), std::ref(s1), std::ref(s2), rowArray[startx], rowArray[endx]);
+            }
+
+            // join new page rank threads
+            for(int i = 0; i < n_threads; i++){
+                row_threads[i].join();
             }
         }
         
-        // join new page rank threads
-        // for(int i = 0; i < n_threads; i++){
-        //     row_threads[i].join();
-        // }
-        // lcs(dp, s1, s2, rowArray.front(), rowArray.back());
+        // lcs(std::ref(dp), std::ref(s1), std::ref(s2), rowArray.front(), rowArray.back());
 
         rowArray.clear();
-
     }
     int lcs_length = dp[m][n];
 

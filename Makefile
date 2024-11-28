@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++14 -march=native -pthread -O3
+CXXFLAGS = -std=c++20 -march=native -pthread -O3
 
 CORE = core/read_file.h
 ALL = lcs_serial lcs_parallel lcs_distributed
