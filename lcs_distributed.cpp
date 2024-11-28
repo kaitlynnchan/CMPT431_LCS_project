@@ -157,7 +157,6 @@ int main(int argc, char *argv[])
         parseInputs(argv[1], &inputFile);
     
         // read strings from inputFile
-        string string1, string2;
         readFile(inputFile, string1, string2);
         
         string1_size = string1.size();
