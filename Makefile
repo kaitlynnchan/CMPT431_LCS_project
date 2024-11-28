@@ -1,13 +1,27 @@
+ifdef USE_INT
+MACRO = -DUSE_INT
+endif
+
 CXX = g++
-CXXFLAGS = -std=c++20 -march=native -pthread -O3
+MPICXX = mpic++
+CXXFLAGS = -std=c++20 -march=native -pthread -O3 $(MACRO)
 
 CORE = core/read_file.h
-ALL = lcs_serial lcs_parallel lcs_distributed
+SERIAL= lcs_serial 
+PARALLEL= lcs_parallel
+DISTRIBUTED= lcs_distributed
+ALL = $(SERIAL) $(PARALLEL) $(DISTRIBUTED)
 
 all : $(ALL)
 
-% : %.cpp $(CORE) 
-	$(CXX) $(CXXFLAGS) -o $@ $< 
+$(SERIAL): %: %.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+$(PARALLEL): %: %.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+$(DISTRIBUTED): %: %.cpp
+	$(MPICXX) $(CXXFLAGS) -o $@ $<
 
 .PHONY: clean 
 
