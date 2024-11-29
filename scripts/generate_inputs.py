@@ -96,7 +96,7 @@ else:
         os.mkdir(input_dir + "/small_inputs")
     if not os.path.exists(input_dir + "/medium_inputs"): 
         os.mkdir(input_dir + "/medium_inputs")
-    elif not os.path.exists(input_dir + "/large_inputs"): 
+    if not os.path.exists(input_dir + "/large_inputs"): 
         os.mkdir(input_dir + "/large_inputs")
     generate_small_inputs()
     generate_medium_inputs()
