@@ -43,14 +43,16 @@ int lcs_serial(string &s1, string &s2)
     int number_of_diagnals = m +n -1;
     for (int d = 1; d <= number_of_diagnals; d++)
     {
-        for (int i = 1; i <= m; i++)
+        // get start and end row for diagonals
+        int start_row = std::max(1, d-n+1);
+        int end_row = std::min(m,d); 
+        for (int i = start_row; i <= end_row; i++)
         {
-            for (int j = 1; j <= n; j++)
-            {
-                // Ensure we are only processing elements along the diagonal
-                if( j + i == d + 1){ 
-                    diagonalIndices.push_back(make_tuple(i, j));
-                }
+            //get column indices
+            int j = d + 1 - i;
+            // Ensure we are only processing elements along the diagonal
+            if(j>=1 && j <= n){ 
+                diagonalIndices.push_back(make_tuple(i, j));
             }
         }
     }

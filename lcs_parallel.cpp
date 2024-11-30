@@ -46,12 +46,19 @@ void lcs_parallel(int n_threads, string &s1, string &s2) {
     vector<tuple<int, int>> diagonalIndices;
 
     int number_of_diagnals = m + n - 1;
-    for (int d = 1; d <= number_of_diagnals; d++){
-        for (int i = 1; i <= m; i++){
-            for (int j = 1; j <= n; j++){
-                if( j + i == d + 1){
-                    diagonalIndices.push_back(make_tuple(i, j));
-                }
+   
+    for (int d = 1; d <= number_of_diagnals; d++)
+    {
+        // get start and end row for diagonals
+        int start_row = std::max(1, d-n+1);
+        int end_row = std::min(m,d); 
+        for (int i = start_row; i <= end_row; i++)
+        {
+            //get column indices
+            int j = d + 1 - i;
+            // Ensure we are only processing elements along the diagonal
+            if(j>=1 && j <= n){ 
+                diagonalIndices.push_back(make_tuple(i, j));
             }
         }
 
