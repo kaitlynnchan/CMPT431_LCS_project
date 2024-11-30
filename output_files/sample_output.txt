@@ -1,0 +1,9 @@
+./lcs_serial --inputFile=input_files/small_inputs/input0.txt
+
+String 1 : PXWDthAMoCScDCaoHrLjC
+String 2 : mOhFhCZUS
+Calculating...
+process, time_taken
+0, 2.6e-05
+Longest Common Subsequence : 3
+Time Taken (in seconds) : 2.6e-0.5
