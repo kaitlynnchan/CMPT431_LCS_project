@@ -2,6 +2,8 @@
 #include <vector>
 #include <tuple>
 #include <ctime>
+#include <stdio.h>
+#include <stdlib.h>
 
 void longestCommonSubsequence(string &s1, string &s2, vector<tuple<int, int>> &diagonalIndices, int startIndex, int endIndex, vector<vector<int>> &dp) 
 {
@@ -21,8 +23,33 @@ void longestCommonSubsequence(string &s1, string &s2, vector<tuple<int, int>> &d
     }
 }
 
+string lcs(int length, string &s1, string &s2, vector<vector<int>> &dp) {
+    string sequence;
+    int i = s1.size(); 
+    int j = s2.size(); 
+    int ind = length ;
+    while (i > 0 && j > 0) {
+        if (s1[i-1] == s2[j-1]) {
+            sequence.push_back(s1[i-1]);
+            i-=1; 
+            j-=1; 
+            ind-=1;
+        }
+        else {
+            if (dp[i-1][j] > dp[i][j-1]) {
+                i--; 
+            }
+            else {
+                j--; 
+            }
+        }
+    }
+    reverse(sequence.begin(), sequence.end());
+    return sequence;
+}
+
 // Returns length of LCS for s1[0..m-1], s2[0..n-1]
-int lcs_serial(string &s1, string &s2) 
+tuple<string, int> lcs_serial(string &s1, string &s2) 
 {
     // start timer
     std::clock_t start_timer;
@@ -72,8 +99,11 @@ int lcs_serial(string &s1, string &s2)
     
     // dp[m][n] contains length of LCS for s1[0..m-1]
     // and s2[0..n-1]
-    return dp[m][n];
+
+    string seq = lcs(dp[m][n], s1, s2, dp);
+    return make_tuple(seq, dp[m][n]);
 }
+
 
 int main(int argc, char *argv[]) {
     // parse command line arguments
@@ -86,9 +116,10 @@ int main(int argc, char *argv[]) {
     std::cout << "String 1 : " << string1 << "\n";
     std::cout << "String 2 : " << string2 << "\n";
 
-    int length = lcs_serial(string1, string2);
+    tuple<string, int> output = lcs_serial(string1, string2);
 
-    std:: cout << "The Length of the Longest Common Subsequence is: " << length << endl;
+    std:: cout << "The Longest Common Subsequence is: " << std::get<0>(output) << endl;
+    std:: cout << "The Length of the Longest Common Subsequence is: " << std::get<1>(output) << endl;
 
     return 0; 
 }
