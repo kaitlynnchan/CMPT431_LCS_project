@@ -32,7 +32,14 @@ void longestCommonSubsequence(string &s1, string &s2,
 
 // Returns length of LCS for s1[0..m-1], s2[0..n-1]
 int lcs_distributed(string &s1, string &s2, int world_size, int world_rank) 
-{
+{ 
+    // start timer
+    std::clock_t start;
+    double duration;
+    start = std::clock();
+
+    int num_elements_processed;
+
     // m and n represent the lengths of s1 and s2
     int m = s1.size();
     int n = s2.size();
@@ -46,14 +53,16 @@ int lcs_distributed(string &s1, string &s2, int world_size, int world_rank)
     int number_of_diagnals = m +n -1;
     for (int d = 1; d <= number_of_diagnals; d++)
     {
-        for (int i = 1; i <= m; i++)
+        // get start and end row for diagonals
+        int start_row = std::max(1, d-n+1);
+        int end_row = std::min(m,d); 
+        for (int i = start_row; i <= end_row; i++)
         {
-            for (int j = 1; j <= n; j++)
-            {
-                // Ensure we are only processing elements along the diagonal
-                if( j + i == d + 1){ 
-                    diagonalIndices.push_back(make_tuple(i, j));
-                }
+            //get column indices
+            int j = d + 1 - i;
+            // Ensure we are only processing elements along the diagonal
+            if( j >= 1 && j <= n){ 
+                diagonalIndices.push_back(make_tuple(i, j));
             }
         }
 
@@ -71,6 +80,7 @@ int lcs_distributed(string &s1, string &s2, int world_size, int world_rank)
             start = elements_per_process * world_rank;
             end = (world_rank == world_size - 1) ? num_elements : elements_per_process * (world_rank + 1);
         }
+        num_elements_processed += end - start;
 
         // Vector to store the local results of each process
         vector<int> send_items;
@@ -126,6 +136,14 @@ int lcs_distributed(string &s1, string &s2, int world_size, int world_rank)
         // Remove all the elements after processing the current diagonal
         diagonalIndices.clear();
     }
+
+    // calculate the time taken
+    duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+
+    if (world_rank == 0) {
+        std::cout << "rank, num_elements_processed, time_taken\n";
+    } 
+    std::cout << world_rank << ", " << num_elements_processed << ", " << duration << "\n";
 
     // dp[m][n] contains length of LCS for s1[0..m-1]
     // and s2[0..n-1]
