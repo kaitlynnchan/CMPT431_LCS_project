@@ -30,7 +30,7 @@ $ make
 $ cd scripts
 
 # generate inputs (sample inputs are given)
-$ python3 generate_inputs.py #generates inputs of sizes 50, 100, 1000, 5000. 10000 and 50000
+$ python3 generate_inputs.py #generates inputs of sizes 50, 100, 1000, 5000, and 10000 
 
 # to run the serial and parallel version for all inputs 
 # writes output to output_files 
