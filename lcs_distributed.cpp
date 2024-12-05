@@ -1,4 +1,5 @@
 #include "core/read_file.h"
+#include <ctime>
 #include <iostream>
 #include <vector>
 #include <tuple>
@@ -31,7 +32,14 @@ void longestCommonSubsequence(string &s1, string &s2,
 
 // Returns length of LCS for s1[0..m-1], s2[0..n-1]
 int lcs_distributed(string &s1, string &s2, int world_size, int world_rank) 
-{
+{ 
+    // start timer
+    std::clock_t start;
+    double duration;
+    start = std::clock();
+
+    int num_elements_processed;
+
     // m and n represent the lengths of s1 and s2
     int m = s1.size();
     int n = s2.size();
@@ -53,7 +61,8 @@ int lcs_distributed(string &s1, string &s2, int world_size, int world_rank)
             //get column indices
             int j = d + 1 - i;
             // Ensure we are only processing elements along the diagonal
-            if(j>=1 && j <= n){ 
+
+            if( j >= 1 && j <= n){ 
                 diagonalIndices.push_back(make_tuple(i, j));
             }
         }
@@ -72,6 +81,7 @@ int lcs_distributed(string &s1, string &s2, int world_size, int world_rank)
             start = elements_per_process * world_rank;
             end = (world_rank == world_size - 1) ? num_elements : elements_per_process * (world_rank + 1);
         }
+        num_elements_processed += end - start;
 
         // Vector to store the local results of each process
         vector<int> send_items;
@@ -128,6 +138,14 @@ int lcs_distributed(string &s1, string &s2, int world_size, int world_rank)
         diagonalIndices.clear();
     }
 
+    // calculate the time taken
+    duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+
+    if (world_rank == 0) {
+        std::cout << "rank, num_elements_processed, time_taken\n";
+    } 
+    std::cout << world_rank << ", " << num_elements_processed << ", " << duration << "\n";
+
     // dp[m][n] contains length of LCS for s1[0..m-1]
     // and s2[0..n-1]
     return dp[m][n];
@@ -163,10 +181,16 @@ int main(int argc, char *argv[])
         
         string1_size = string1.size();
         string2_size = string2.size();
+        std::cout << "Number of Processes : " << world_size << "\n";
         std::cout << "String 1 : " << string1 << "\n";
         std::cout << "String 2 : " << string2 << "\n";
     }
 
+    // start timer
+    std::clock_t start;
+    double duration;
+    start = std::clock();
+    
     // Broadcast the sizes of the strings to all processes
     MPI_Bcast(&string1_size, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(&string2_size, 1, MPI_INT, 0, MPI_COMM_WORLD);
@@ -181,8 +205,12 @@ int main(int argc, char *argv[])
 
     int length = lcs_distributed(string1, string2, world_size, world_rank);
 
+    // calculate the time taken
+    duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+
     if (world_rank == 0) {
         std::cout << "The Length of the Longest Common Subsequence is: " << length << "\n";
+        std::cout << "Time Taken (in seconds) : " << duration << endl;
     }
 
     // Finalize the MPI environment.

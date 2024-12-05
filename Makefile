@@ -4,7 +4,7 @@ endif
 
 CXX = g++
 MPICXX = mpic++
-CXXFLAGS = -std=c++20 -march=native -pthread -O3 $(MACRO)
+CXXFLAGS = -std=c++11 -march=native -pthread -O3 $(MACRO)
 
 CORE = core/read_file.h
 SERIAL= lcs_serial 
