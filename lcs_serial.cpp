@@ -3,9 +3,10 @@
 #include <tuple>
 #include <ctime>
 
-
+// Citation: Implementation of lcs serial code was inspired from geeksforgeeks
 // Get the dynamic programming table for the strings to find the length 
-void longestCommonSubsequence(string &s1, string &s2, vector<tuple<int, int>> &diagonalIndices, int startIndex, int endIndex, vector<vector<int>> &dp) 
+void longestCommonSubsequence(string &s1, string &s2, vector<tuple<int, int>> &diagonalIndices, 
+                                int startIndex, int endIndex, vector<vector<int>> &dp) 
 {
     for (int x = startIndex; x < endIndex; x++)
     {
@@ -23,6 +24,7 @@ void longestCommonSubsequence(string &s1, string &s2, vector<tuple<int, int>> &d
     }
 }
 
+// Citation: printing the lcs code was inspired by GeeksForGeeks
 // Find the longest common sequence by backtracking in the dp table 
 string lcs_sequence(int length, string &s1, string &s2, vector<vector<int>> &dp) {
     // initialize sequence of given length

@@ -45,3 +45,7 @@ $ python3 run.py #takes a little bit of time
 # runs the distributed version for various processes
 $ sbatch lcs_distributed.sh #saves output to slurm_output_distributed.txt in output_files 
 ```
+
+## Citations
+Some portions of our code were developed with assistance from the following website:
+https://www.geeksforgeeks.org/printing-longest-common-subsequence/
