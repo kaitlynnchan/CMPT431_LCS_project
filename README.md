@@ -26,15 +26,17 @@ To generate the inputs and run the scripts
 # create the executable files
 $ make
 
+# need to be in the scripts directory to run
+$ cd scripts
+
 # generate inputs (sample inputs are given)
-$ python3 scripts/generate_inputs.py #generates inputs of sizes 50, 100, 1000, 5000. 10000 and 50000
+$ python3 generate_inputs.py #generates inputs of sizes 50, 100, 1000, 5000. 10000 and 50000
 
 # to run the serial and parallel version for all inputs 
 # writes output to output_files 
 # only runs distributed with 1 process
-$ python3 scripts/run.py #takes a little bit of time
+$ python3 run.py #takes a little bit of time
 
 # to run the distributed version for various processes
-$ sbatch scripts/lcs_distributed.sh #saves output to slurm_output.txt in output_files 
-
+$ sbatch lcs_distributed.sh #saves output to slurm_output.txt in output_files 
 ```
