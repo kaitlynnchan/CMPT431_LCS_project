@@ -1,45 +1,56 @@
 import os 
-import subprocess 
+from subprocess import PIPE, run
 
 path = os.getcwd()
 directory = os.path.dirname(path)
 output_dir = os.path.join(directory, "output_files")
+input_dir = os.path.join(directory, "input_files")
 
 if not os.path.exists(output_dir):
     os.mkdir(output_dir)
 
-def run_executable(executable, args, filename):
-    result = subprocess.run([os.path.dirname(path) + '/' + executable] + args, capture_output=True, text=True)
-    file = os.path.join(output_dir, filename)
-    f = open(file, "a")
-    f.write(result.stdout)
-    f.write("\n")
-    f.close()
+possible_threads = [2, 4, 8]
 
-small_inputs = os.path.join(os.path.dirname(path), "input_files", "small_inputs")
-medium_inputs = os.path.join(os.path.dirname(path), "input_files", "medium_inputs")
-large_inputs = os.path.join(os.path.dirname(path), "input_files", "large_inputs")
+def run_serial():
+    serial_dir = os.path.join(output_dir, "serial")
+    if not os.path.exists(serial_dir):
+        os.mkdir(serial_dir)
 
-nthreads = 4
+    for file in os.listdir(input_dir): 
+        result =run([os.path.dirname(path) + '/' + "./lcs_serial"] + 
+                                ["--inputFile=" + os.path.join(input_dir, file)], stdout=PIPE)
+        f = open(os.path.join(serial_dir, "output_" + file[6:]) , "w")
+        f.write(result.stdout.decode('utf-8')) 
+        f.close()
 
-if os.path.exists(small_inputs): 
-    f = open(os.path.join(output_dir, "small_output_serial"), "w")
-    f = open(os.path.join(output_dir, "small_output_parallel"), "w")
-    for file in os.listdir(small_inputs): 
-        run_executable('./lcs_serial', [os.path.join(small_inputs, file)], "small_output_serial")
-        run_executable('./lcs_parallel', [str(nthreads), os.path.join(small_inputs, file)], "small_output_parallel")
+run_serial()
 
-if os.path.exists(medium_inputs): 
-    f = open(os.path.join(output_dir, "medium_output_serial"), "w")
-    f = open(os.path.join(output_dir, "medium_output_parallel"), "w")
-    for file in os.listdir(medium_inputs): 
-        run_executable('./lcs_serial', [os.path.join(medium_inputs, file)], "medium_output_serial")
-        run_executable('./lcs_parallel', [str(nthreads), os.path.join(small_inputs, file)], "medium_output_parallel")
+def run_parallel():
+    parallel_dir = os.path.join(output_dir, "parallel")
+    if not os.path.exists(parallel_dir):
+        os.mkdir(parallel_dir)
+    for file in os.listdir(input_dir): 
+        f = open(os.path.join(parallel_dir, "output_" + file[6:]) , "w")
+        for threads in possible_threads: 
+            result = run([os.path.dirname(path) + '/' + "./lcs_parallel"] + 
+                                ["--numThreads=" + str(threads), "--inputFile=" + os.path.join(input_dir, file)], stdout=PIPE)
+            f = open(os.path.join(parallel_dir, "output_" + file[6:]) , "a")
+            f.write(result.stdout.decode('utf-8'))
+            f.write("\n")
+            f.close()
 
+run_parallel()
 
-if os.path.exists(large_inputs): 
-    f = open(os.path.join(output_dir, "large_output_serial"), "w")
-    f = open(os.path.join(output_dir, "large_output_parallel"), "w")
-    for file in os.listdir(large_inputs): 
-        run_executable('./lcs_serial', [os.path.join(large_inputs, file)], "large_output_serial")
-        run_executable('./lcs_parallel', [str(nthreads), os.path.join(small_inputs, file)], "large_output_parallel")
+def run_distributed():
+    distributed_dir = os.path.join(output_dir, "distributed")
+    if not os.path.exists(distributed_dir):
+        os.mkdir(distributed_dir)
+    for file in os.listdir(input_dir): 
+        result = run([os.path.dirname(path) + '/' + "./lcs_distributed"] + 
+                                ["--inputFile=" + os.path.join(input_dir, file)], stdout=PIPE) 
+        f = open(os.path.join(distributed_dir, "output_" + file[6:]) , "w")
+        f.write(result.stdout.decode('utf-8'))
+        f.write("\n")
+        f.close()
+
+##run_distributed()
