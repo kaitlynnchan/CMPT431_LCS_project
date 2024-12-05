@@ -30,6 +30,7 @@ void longestCommonSubsequence(string &s1, string &s2,
     }
 }
 
+// Citation: printing the lcs code was inspired by GeeksForGeeks
 // Find the longest common sequence by backtracking in the dp table 
 string lcs_sequence(int length, string &s1, string &s2, vector<vector<int>> &dp) {
     // initialize sequence of given length

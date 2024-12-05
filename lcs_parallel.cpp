@@ -16,7 +16,8 @@ public:
         : n_elements(0), time_taken(0.0) {}
 };
 
-void lcs(vector<vector<int>> &dp, string &s1, string &s2, int startx, int endx, vector<tuple<int, int>> &diagonalIndices, double *time_taken){
+void lcs(vector<vector<int>> &dp, string &s1, string &s2, int startx, int endx, 
+            vector<tuple<int, int>> &diagonalIndices, double *time_taken){
     // start timer
     std::clock_t start;
     double duration;
@@ -39,6 +40,7 @@ void lcs(vector<vector<int>> &dp, string &s1, string &s2, int startx, int endx, 
     *time_taken += (std::clock() - start) / (double) CLOCKS_PER_SEC;
 }
 
+// Citation: printing the lcs code was inspired by GeeksForGeeks
 // Find the longest common sequence by backtracking in the dp table 
 string lcs_sequence(int length, string &s1, string &s2, vector<vector<int>> &dp) {
     // initialize sequence of given length
@@ -120,7 +122,8 @@ void lcs_parallel(int n_threads, string &s1, string &s2) {
                 thread_info[i].n_elements += endx - startx;
                 
                 // compute vertex decomposition
-                row_threads[i] = std::thread(lcs, ref(dp), ref(s1), ref(s2), startx, endx, ref(diagonalIndices), &thread_info[i].time_taken);
+                row_threads[i] = std::thread(lcs, ref(dp), ref(s1), ref(s2), startx, endx, 
+                                    ref(diagonalIndices), &thread_info[i].time_taken);
             }
 
             // join new page rank threads
