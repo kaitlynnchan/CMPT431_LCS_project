@@ -1,0 +1,37 @@
+Number of Processes : 2
+String 1 : oAwAbtvDWfUXHFqlzxpIxBLnJfDFhXiEDjPEpeDnDGAIisxSma
+String 2 : fZlcJqswkgAUKobIAprByKpgrayfcLGEllwulYRAislxYoEJQD
+rank, num_elements_processed, time_taken
+0, 1227, 0.000356
+1, 1273, 0.00033
+The Longest Common Subsequence is: wAUIBpGAisx
+The Length of the Longest Common Subsequence is: 11
+Time Taken (in seconds) : 0.0006
+
+Number of Processes : 4
+String 1 : oAwAbtvDWfUXHFqlzxpIxBLnJfDFhXiEDjPEpeDnDGAIisxSma
+String 2 : fZlcJqswkgAUKobIAprByKpgrayfcLGEllwulYRAislxYoEJQD
+rank, num_elements_processed, time_taken
+3, 724, 0.000475
+1, 592, 0.000486
+2, 590, 0.000476
+0, 594, 0.000523
+The Longest Common Subsequence is: wAUIBpGAisx
+The Length of the Longest Common Subsequence is: 11
+Time Taken (in seconds) : 0.00063
+
+Number of Processes : 8
+String 1 : oAwAbtvDWfUXHFqlzxpIxBLnJfDFhXiEDjPEpeDnDGAIisxSma
+String 2 : fZlcJqswkgAUKobIAprByKpgrayfcLGEllwulYRAislxYoEJQD
+rank, num_elements_processed, time_taken
+3, 278, 0.000698
+6, 272, 0.000713
+7, 554, 0.000713
+1, 282, 0.000719
+2, 280, 0.000699
+4, 276, 0.000713
+5, 274, 0.000713
+0, 284, 0.000754
+The Longest Common Subsequence is: wAUIBpGAisx
+The Length of the Longest Common Subsequence is: 11
+Time Taken (in seconds) : 0.000859

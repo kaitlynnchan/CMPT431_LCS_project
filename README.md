@@ -19,3 +19,22 @@ $ ./lcs_parallel --numThreads=2 --inputFile=input_files/text.txt
 $ scp -P 24 -r <path> <username>@cs-cloud.cs.surrey.sfu.ca:<path> # copy the entire directory to slurm
 $ sbatch scripts/lcs_job_1.sh # run the jobs located in the scripts folder
 ```
+
+To generate the inputs and run the scripts
+
+```bash
+# create the executable files
+$ make
+
+# generate inputs (sample inputs are given)
+$ python3 scripts/generate_inputs.py #generates inputs of sizes 50, 100, 1000, 5000. 10000 and 50000
+
+# to run the serial and parallel version for all inputs 
+# writes output to output_files 
+# only runs distributed with 1 process
+$ python3 scripts/run.py #takes a little bit of time
+
+# to run the distributed version for various processes
+$ sbatch scripts/lcs_distributed.sh #saves output to slurm_output.txt in output_files 
+
+```

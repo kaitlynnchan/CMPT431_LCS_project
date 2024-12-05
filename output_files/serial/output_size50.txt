@@ -1,0 +1,8 @@
+String 1 : oAwAbtvDWfUXHFqlzxpIxBLnJfDFhXiEDjPEpeDnDGAIisxSma
+String 2 : fZlcJqswkgAUKobIAprByKpgrayfcLGEllwulYRAislxYoEJQD
+Calculating... 
+process, time_taken
+0, 0.00029
+The Longest Common Subsequence is: wAUIBpGAisx
+The Length of the Longest Common Subsequence is: 11
+Time Taken (in seconds) : 0.00029

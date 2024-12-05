@@ -35,9 +35,36 @@ void lcs(vector<vector<int>> &dp, string &s1, string &s2, int startx, int endx, 
             dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
         }
     }
-    
     // calculate the time taken
     *time_taken += (std::clock() - start) / (double) CLOCKS_PER_SEC;
+}
+
+// Find the longest common sequence by backtracking in the dp table 
+string lcs_sequence(int length, string &s1, string &s2, vector<vector<int>> &dp) {
+    // initialize sequence of given length
+    char sequence[length+1];
+    sequence[length] = '\0';
+
+    int i = s1.size(); 
+    int j = s2.size(); 
+    int index = length -1; 
+
+    // backtrack through the dp table, and update 
+    // sequence when the characters in the string match
+    while (i > 0 && j > 0) {
+        if (s1[i-1] == s2[j-1]) {
+            sequence[index] = s1[i-1];
+            i-=1; 
+            j-=1;
+            index-=1;
+        }
+        // Move up or left depending on the values in dp table 
+        else if (dp[i-1][j] > dp[i][j-1])
+            i--; 
+        else 
+            j--; 
+    }
+    return sequence;
 }
 
 // Returns length of LCS for s1[0..m-1], s2[0..n-1]
@@ -48,7 +75,6 @@ void lcs_parallel(int n_threads, string &s1, string &s2) {
     start = std::clock();
     
     std::cout << "Calculating... " << endl;
-
     int m = s1.size();
     int n = s2.size();
 
@@ -81,6 +107,7 @@ void lcs_parallel(int n_threads, string &s1, string &s2) {
             // there are less values to calculate than threads, run lcs without threads
             thread_info[0].n_elements += diagonalIndices.size();
             lcs(dp, s1, s2, 0, diagonalIndices.size(), diagonalIndices, &thread_info[0].time_taken);
+
         } else {
             std::thread row_threads[n_threads];
             for(int i = 0; i < n_threads; i++){
@@ -107,6 +134,8 @@ void lcs_parallel(int n_threads, string &s1, string &s2) {
 
     int lcs_length = dp[m][n];
 
+    string seq = lcs_sequence(lcs_length, s1, s2, dp);
+
     // calculate the time taken
     duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
 
@@ -115,7 +144,8 @@ void lcs_parallel(int n_threads, string &s1, string &s2) {
         std::cout << i << ", " << thread_info[i].n_elements << ", " << thread_info[i].time_taken << std::endl;
     }
 
-    std::cout << "Longest Common Subsequence : " << lcs_length << endl;
+    std::cout << "The Longest Common Subsequence is: " << seq << endl;
+    std::cout << "The Length of the Longest Common Subsequence is: " << lcs_length << endl;
     std::cout << "Time Taken (in seconds) : " << duration << endl;
 
     delete[] thread_info;
@@ -138,5 +168,6 @@ int main(int argc, char *argv[]) {
     std::cout << "String 2 : " << string2 << "\n";
     
     lcs_parallel(numThreads, string1, string2);
+
     return 0; 
 }

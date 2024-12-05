@@ -1,0 +1,8 @@
+String 1 : WzbLdbvuzBHjXJqNNfnyUWNRylviYoTRsAcsjScqOQIQoguXRZLpCudUXQCqagaXyBhyPMmzCkqrnbVbVVuKYeYyJkpfxohwclnw
+String 2 : nLUdrDnkCgCqMfIQGImaTEjNkYQZPVArghhXMEsToGVBFTMFEpuAaAPhSveXqRiUAetqqggjuINyXKaKqYonMKKifHMIikkbaXzt
+Calculating... 
+process, time_taken
+0, 0.000625
+The Longest Common Subsequence is: LdqfNYAsouXRUqquKYon
+The Length of the Longest Common Subsequence is: 20
+Time Taken (in seconds) : 0.000625
