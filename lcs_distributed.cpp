@@ -30,6 +30,33 @@ void longestCommonSubsequence(string &s1, string &s2,
     }
 }
 
+// Find the longest common sequence by backtracking in the dp table 
+string lcs_sequence(int length, string &s1, string &s2, vector<vector<int>> &dp) {
+    // initialize sequence of given length
+    char sequence[length+1];
+    sequence[length] = '\0';
+
+    int i = s1.size(); 
+    int j = s2.size(); 
+    int index = length -1; 
+
+    // backtrack through the dp table, and update 
+    // sequence when the characters in the string match
+    while (i > 0 && j > 0) {
+        if (s1[i-1] == s2[j-1]) {
+            sequence[index] = s1[i-1];
+            i-=1; 
+            j-=1;
+            index-=1;
+        }
+        // Move up or left depending on the values in dp table 
+        else if (dp[i-1][j] > dp[i][j-1])
+            i--; 
+        else 
+            j--; 
+    }
+    return sequence;
+}
 // Returns length of LCS for s1[0..m-1], s2[0..n-1]
 int lcs_distributed(string &s1, string &s2, int world_size, int world_rank) 
 { 
@@ -145,9 +172,15 @@ int lcs_distributed(string &s1, string &s2, int world_size, int world_rank)
         std::cout << "rank, num_elements_processed, time_taken\n";
     } 
     std::cout << world_rank << ", " << num_elements_processed << ", " << duration << "\n";
+    // make sure all thread stats are printed together
+    MPI_Barrier(MPI_COMM_WORLD);
 
     // dp[m][n] contains length of LCS for s1[0..m-1]
     // and s2[0..n-1]
+    if (world_rank == 0) {
+        string seq = lcs_sequence(dp[m][n], s1, s2, dp);
+        cout << "The Longest Common Subsequence is: " << seq << endl;
+    }
     return dp[m][n];
 }
 
