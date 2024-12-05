@@ -20,7 +20,7 @@ $ ./lcs_serial --inputFile=input_files/text.txt
 $ ./lcs_parallel --numThreads=2 --inputFile=input_files/text.txt
 
 # run the distributed version in cs-cloud
-$ scp -P 24 -r <path> <username>@cs-cloud.cs.surrey.sfu.ca:<path> # copy the entire directory to cs-cloud
+$ scp -P 24 -r <path> <username>@cs-cloud.cs.surrey.sfu.ca:<path> # copy the entire proj to cs-cloud
 $ sbatch scripts/lcs_job_1.sh # run the job located in the scripts folder 
 ```
 
@@ -45,7 +45,7 @@ $ python3 run.py #takes a little bit of time
 # runs the distributed version for various processes
 # the slurm job should be run from the home directory for this project
 $ cd ../
-$ sbatch lcs_distributed.sh #saves output to slurm_output_distributed.txt in output_files 
+$ sbatch scripts/lcs_distributed.sh #saves output to slurm_output_distributed.txt in output_files 
 ```
 
 ## Citations
