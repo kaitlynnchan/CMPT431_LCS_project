@@ -43,6 +43,8 @@ $ python3 generate_inputs.py #generates inputs of sizes 50, 100, 1000, 5000, and
 $ python3 run.py #takes a little bit of time
 
 # runs the distributed version for various processes
+# the slurm job should be run from the home directory for this project
+$ cd ../
 $ sbatch lcs_distributed.sh #saves output to slurm_output_distributed.txt in output_files 
 ```
 
