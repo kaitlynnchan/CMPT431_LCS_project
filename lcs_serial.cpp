@@ -2,9 +2,9 @@
 #include <vector>
 #include <tuple>
 #include <ctime>
-#include <stdio.h>
-#include <stdlib.h>
 
+
+// Get the dynamic programming table for the strings to find the length 
 void longestCommonSubsequence(string &s1, string &s2, vector<tuple<int, int>> &diagonalIndices, int startIndex, int endIndex, vector<vector<int>> &dp) 
 {
     for (int x = startIndex; x < endIndex; x++)
@@ -23,39 +23,37 @@ void longestCommonSubsequence(string &s1, string &s2, vector<tuple<int, int>> &d
     }
 }
 
-string lcs(int length, string &s1, string &s2, vector<vector<int>> &dp) {
-    string sequence;
+// Find the longest common sequence by backtracking in the dp table 
+string lcs_sequence(int length, string &s1, string &s2, vector<vector<int>> &dp) {
+    // initialize sequence of given length
+    char sequence[length+1];
+    sequence[length] = '\0';
+
     int i = s1.size(); 
     int j = s2.size(); 
-    int ind = length ;
+    int index = length -1; 
+
+    // backtrack through the dp table, and update 
+    // sequence when the characters in the string match
     while (i > 0 && j > 0) {
         if (s1[i-1] == s2[j-1]) {
-            sequence.push_back(s1[i-1]);
+            sequence[index] = s1[i-1];
             i-=1; 
-            j-=1; 
-            ind-=1;
+            j-=1;
+            index-=1;
         }
-        else {
-            if (dp[i-1][j] > dp[i][j-1]) {
-                i--; 
-            }
-            else {
-                j--; 
-            }
-        }
+        // Move up or left depending on the values in dp table 
+        else if (dp[i-1][j] > dp[i][j-1])
+            i--; 
+        else 
+            j--; 
     }
-    reverse(sequence.begin(), sequence.end());
     return sequence;
 }
 
 // Returns length of LCS for s1[0..m-1], s2[0..n-1]
 tuple<string, int> lcs_serial(string &s1, string &s2) 
 {
-    // start timer
-    std::clock_t start_timer;
-    double duration;
-    start_timer = std::clock();
-    cout << "Calculating... " << endl;
     
     // m and n represent the lengths of s1 and s2
     int m = s1.size();
@@ -89,18 +87,10 @@ tuple<string, int> lcs_serial(string &s1, string &s2)
     int endx = diagonalIndices.size();
 
     longestCommonSubsequence(s1, s2, diagonalIndices, startx, endx, dp);
-
-     // calculate the time taken
-    duration = (std::clock() - start_timer) / (double) CLOCKS_PER_SEC;
-
-    std::cout << "process, time_taken" << endl;
-    std::cout << "0, " << duration << endl;
-    std::cout << "Time Taken (in seconds) : " << duration << endl;
     
     // dp[m][n] contains length of LCS for s1[0..m-1]
     // and s2[0..n-1]
-
-    string seq = lcs(dp[m][n], s1, s2, dp);
+    string seq = lcs_sequence(dp[m][n], s1, s2, dp);
     return make_tuple(seq, dp[m][n]);
 }
 
@@ -115,11 +105,23 @@ int main(int argc, char *argv[]) {
     readFile(inputFile, string1, string2);
     std::cout << "String 1 : " << string1 << "\n";
     std::cout << "String 2 : " << string2 << "\n";
+    // start timer
+    std::clock_t start_timer;
+    double duration;
+    start_timer = std::clock();
+    cout << "Calculating... " << endl;
 
     tuple<string, int> output = lcs_serial(string1, string2);
 
+     // calculate the time taken
+    duration = (std::clock() - start_timer) / (double) CLOCKS_PER_SEC;
+
+    std::cout << "process, time_taken" << endl;
+    std::cout << "0, " << duration << endl;
     std:: cout << "The Longest Common Subsequence is: " << std::get<0>(output) << endl;
     std:: cout << "The Length of the Longest Common Subsequence is: " << std::get<1>(output) << endl;
+
+    std::cout << "Time Taken (in seconds) : " << duration << endl;
 
     return 0; 
 }

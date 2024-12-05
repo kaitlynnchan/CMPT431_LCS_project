@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void lcs(std::barrier<> &b, vector<vector<int>> &dp, string &s1, string &s2, int startx, int endx, vector<tuple<int, int>> &diagonalIndices){
+void lcs(vector<vector<int>> &dp, string &s1, string &s2, int startx, int endx, vector<tuple<int, int>> &diagonalIndices){
     
     for (int x = startx; x < endx; x++) {
         // Unpack the tuple containing (i, j) indices
@@ -23,19 +23,38 @@ void lcs(std::barrier<> &b, vector<vector<int>> &dp, string &s1, string &s2, int
             dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
         }
     }
+}
 
-    b.arrive_and_wait();
+// Find the longest common sequence by backtracking in the dp table 
+string lcs_sequence(int length, string &s1, string &s2, vector<vector<int>> &dp) {
+    // initialize sequence of given length
+    char sequence[length+1];
+    sequence[length] = '\0';
+
+    int i = s1.size(); 
+    int j = s2.size(); 
+    int index = length -1; 
+
+    // backtrack through the dp table, and update 
+    // sequence when the characters in the string match
+    while (i > 0 && j > 0) {
+        if (s1[i-1] == s2[j-1]) {
+            sequence[index] = s1[i-1];
+            i-=1; 
+            j-=1;
+            index-=1;
+        }
+        // Move up or left depending on the values in dp table 
+        else if (dp[i-1][j] > dp[i][j-1])
+            i--; 
+        else 
+            j--; 
+    }
+    return sequence;
 }
 
 // Returns length of LCS for s1[0..m-1], s2[0..n-1]
-void lcs_parallel(int n_threads, string &s1, string &s2) {
-    // start timer
-    std::clock_t start;
-    double duration;
-    start = std::clock();
-    
-    std::cout << "Calculating... " << endl;
-
+tuple<string, int> lcs_parallel(int n_threads, string &s1, string &s2) {
     int m = s1.size();
     int n = s2.size();
 
@@ -62,32 +81,13 @@ void lcs_parallel(int n_threads, string &s1, string &s2) {
             }
         }
 
-        /* Purpose: TEST and PRINT */
-        // std::cout << "Row and column entered: ";
-        // for (const auto& tup : diagonalIndices) {
-        //     // Access the elements of the tuple
-        //     int i = std::get<0>(tup);
-        //     int j = std::get<1>(tup);
-        //     std::cout << "(" << i << ", " << j << ") ";
-        // }
-        // std::cout << "\n";
-        /* Purpose: TEST and PRINT */
-
         double split = diagonalIndices.size() / n_threads;
         if(split < 1){
             // there are less values to calculate than threads, run lcs without threads
-            std::barrier b(1);
-            lcs(b, dp, s1, s2, 0, diagonalIndices.size(), diagonalIndices);
+            lcs(dp, s1, s2, 0, diagonalIndices.size(), diagonalIndices);
             
-            /* Purpose: TEST and PRINT */
-            // std::cout << "Thread " << 0 
-            // << " - startx: " << 0 
-            // << ", endx: " << diagonalIndices.size()
-            // << "\n";
-             /* Purpose: TEST and PRINT */
                 
         } else {
-            std::barrier b(n_threads);
             std::thread row_threads[n_threads];
             for(int i = 0; i < n_threads; i++){
                 int startx = i * split;
@@ -97,17 +97,8 @@ void lcs_parallel(int n_threads, string &s1, string &s2) {
                 }
                 int endx = startx + split;
 
-                /* Purpose: TEST and PRINT */
-                // std::cout << "Thread " << i 
-                // << " - startx: " << startx 
-                // << ", endx: " << endx 
-                // << ", split: " << split 
-                // << ", diagonalIndices size: " << diagonalIndices.size() 
-                // << "\n";
-                /* Purpose: TEST and PRINT */
-                
                 // compute vertex decomposition
-                row_threads[i] = std::thread(lcs, std::ref(b), std::ref(dp), std::ref(s1), std::ref(s2), startx, endx, std::ref(diagonalIndices));
+                row_threads[i] = std::thread(lcs, std::ref(dp), std::ref(s1), std::ref(s2), startx, endx, std::ref(diagonalIndices));
             }
 
             // join new page rank threads
@@ -120,22 +111,8 @@ void lcs_parallel(int n_threads, string &s1, string &s2) {
     }
 
     int lcs_length = dp[m][n];
-
-    /* Purpose: TEST and PRINT */
-    // std::cout << "Diagonal Matrix Results:\n";
-    // for (int i = 1; i <= m; i++){
-    //     for (int j = 1; j <= n; j++){
-    //         std::cout << dp[i][j]<< " ";
-    //     }
-    //     std::cout << "\n";
-    // }
-    /* Purpose: TEST and PRINT */
-
-    // calculate the time taken
-    duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
-
-    std::cout << "Longest Common Subsequence : " << lcs_length << endl;
-    std::cout << "Time Taken (in seconds) : " << duration << endl;
+    string seq = lcs_sequence(lcs_length, s1, s2, dp);
+    return make_tuple(seq, lcs_length);
 }
 
 int main(int argc, char *argv[]) {
@@ -154,6 +131,20 @@ int main(int argc, char *argv[]) {
     std::cout << "String 1 : " << string1 << "\n";
     std::cout << "String 2 : " << string2 << "\n";
     
-    lcs_parallel(numThreads, string1, string2);
+    // start timer
+    std::clock_t start;
+    double duration;
+    start = std::clock();
+    
+    std::cout << "Calculating... " << endl;
+    // get longest common subsequence and length
+    tuple<string, int> output = lcs_parallel(numThreads, string1, string2);
+
+    // calculate the time taken
+    duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+
+    std::cout << "The Longest Common Subsequence is: " << std::get<0>(output) << endl;
+    std::cout << "The Length of the Longest Common Subsequence : " << std::get<1>(output) << endl;
+    std::cout << "Time Taken (in seconds) : " << duration << endl;
     return 0; 
 }
