@@ -1,0 +1,8 @@
+Number of Processes : 1
+String 1 : whatamitesting
+String 2 : thepurposeofthisistotesthowwellthiscalculates
+rank, num_elements_processed, time_taken
+0, 33337, 8.1e-05
+The Length of the Longest Common Subsequence is: 8
+Time Taken (in seconds) : 0.000125
+

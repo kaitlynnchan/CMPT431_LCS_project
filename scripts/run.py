@@ -53,4 +53,4 @@ def run_distributed():
         f.write("\n")
         f.close()
 
-##run_distributed()
+run_distributed()

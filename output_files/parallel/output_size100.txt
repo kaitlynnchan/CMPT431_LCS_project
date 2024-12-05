@@ -1,0 +1,41 @@
+Number of Threads : 2
+String 1 : WzbLdbvuzBHjXJqNNfnyUWNRylviYoTRsAcsjScqOQIQoguXRZLpCudUXQCqagaXyBhyPMmzCkqrnbVbVVuKYeYyJkpfxohwclnw
+String 2 : nLUdrDnkCgCqMfIQGImaTEjNkYQZPVArghhXMEsToGVBFTMFEpuAaAPhSveXqRiUAetqqggjuINyXKaKqYonMKKifHMIikkbaXzt
+Calculating... 
+thread_id, num_elements_processed, time_taken
+0, 4952, 0.001306
+1, 5048, 0.001392
+The Longest Common Subsequence is: LdqfNYAsouXRUqquKYon
+The Length of the Longest Common Subsequence is: 20
+Time Taken (in seconds) : 0.029114
+
+Number of Threads : 4
+String 1 : WzbLdbvuzBHjXJqNNfnyUWNRylviYoTRsAcsjScqOQIQoguXRZLpCudUXQCqagaXyBhyPMmzCkqrnbVbVVuKYeYyJkpfxohwclnw
+String 2 : nLUdrDnkCgCqMfIQGImaTEjNkYQZPVArghhXMEsToGVBFTMFEpuAaAPhSveXqRiUAetqqggjuINyXKaKqYonMKKifHMIikkbaXzt
+Calculating... 
+thread_id, num_elements_processed, time_taken
+0, 2437, 0.000397
+1, 2425, 0.001412
+2, 2425, 0.00161
+3, 2713, 0.000829
+The Longest Common Subsequence is: LdqfNYAsouXRUqquKYon
+The Length of the Longest Common Subsequence is: 20
+Time Taken (in seconds) : 0.052358
+
+Number of Threads : 8
+String 1 : WzbLdbvuzBHjXJqNNfnyUWNRylviYoTRsAcsjScqOQIQoguXRZLpCudUXQCqagaXyBhyPMmzCkqrnbVbVVuKYeYyJkpfxohwclnw
+String 2 : nLUdrDnkCgCqMfIQGImaTEjNkYQZPVArghhXMEsToGVBFTMFEpuAaAPhSveXqRiUAetqqggjuINyXKaKqYonMKKifHMIikkbaXzt
+Calculating... 
+thread_id, num_elements_processed, time_taken
+0, 1220, 0.000582
+1, 1164, 0.0019
+2, 1164, 0.001613
+3, 1164, 0.000876
+4, 1164, 0.00036
+5, 1164, 0.000538
+6, 1164, 0.000505
+7, 1796, 0.000555
+The Longest Common Subsequence is: LdqfNYAsouXRUqquKYon
+The Length of the Longest Common Subsequence is: 20
+Time Taken (in seconds) : 0.118255
+

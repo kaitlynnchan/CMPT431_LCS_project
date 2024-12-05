@@ -10,7 +10,7 @@ input_dir = os.path.join(os.path.dirname(path), "input_files")
 if not os.path.exists(input_dir): 
     os.mkdir(input_dir)
 
-possible_sizes = [50, 100, 1000, 5000, 10000, 20000] 
+possible_sizes = [50, 100, 1000, 5000, 10000] 
 # generates 50 string pairs randomly of a smalller size 
 def generate_inputs():
     for size in possible_sizes: 

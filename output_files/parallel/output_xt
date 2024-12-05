@@ -1,0 +1,41 @@
+Number of Threads : 2
+String 1 : whatamitesting
+String 2 : thepurposeofthisistotesthowwellthiscalculates
+Calculating... 
+thread_id, num_elements_processed, time_taken
+0, 310, 0.000386
+1, 320, 0.00023
+The Longest Common Subsequence is: htitesti
+The Length of the Longest Common Subsequence is: 8
+Time Taken (in seconds) : 0.01094
+
+Number of Threads : 4
+String 1 : whatamitesting
+String 2 : thepurposeofthisistotesthowwellthiscalculates
+Calculating... 
+thread_id, num_elements_processed, time_taken
+0, 144, 0.00018
+1, 132, 0.000263
+2, 132, 0.000431
+3, 222, 0.000302
+The Longest Common Subsequence is: htitesti
+The Length of the Longest Common Subsequence is: 8
+Time Taken (in seconds) : 0.01613
+
+Number of Threads : 8
+String 1 : whatamitesting
+String 2 : thepurposeofthisistotesthowwellthiscalculates
+Calculating... 
+thread_id, num_elements_processed, time_taken
+0, 100, 0.000108
+1, 44, 0.000324
+2, 44, 0.000355
+3, 44, 0.000274
+4, 44, 0.000177
+5, 44, 0.000117
+6, 44, 0.0001
+7, 266, 0.000227
+The Longest Common Subsequence is: htitesti
+The Length of the Longest Common Subsequence is: 8
+Time Taken (in seconds) : 0.031664
+
