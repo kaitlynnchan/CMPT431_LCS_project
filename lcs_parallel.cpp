@@ -1,5 +1,4 @@
 #include "core/read_file.h"
-// #include <barrier>
 #include <ctime>
 #include <iostream>
 #include <thread>
